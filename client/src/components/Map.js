@@ -1,10 +1,11 @@
 import React, {useState, useEffect, useContext}from "react";
-import ReactMapGL, {NavigationControl, Marker, Popup } from "react-map-gl";
+import ReactMapGL, {NavigationControl, Marker, Popup, GeolocateControl } from "react-map-gl";
 import { withStyles } from "@material-ui/core/styles";
 import differenceInMinutes from 'date-fns/difference_in_minutes'
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import DeleteIcon from "@material-ui/icons/DeleteTwoTone";
+import Geocoder from "react-geocoder-autocomplete";
 
 import { unstable_useMediaQuery as useMediaQuery} from "@material-ui/core/useMediaQuery"
 
@@ -16,10 +17,9 @@ import {PIN_ADDED_SUBSCRIPTION,PIN_UPDATED_SUBSCRIPTION,PIN_DELETED_SUBSCRIPTION
 import PinIcon from './PinIcon';
 import Blog from './Blog';
 import Context from '../context';
-// import { Typography } from "@material-ui/core";
 
 import { Subscription } from 'react-apollo'
- 
+
 const INITIAL_VIEWPORT ={
   latitude:35.6698792,
   longitude:139.7463783,
@@ -42,7 +42,7 @@ const Map = ({ classes }) => {
     if (!pinExists) {
       setPopup(null);
     }
-  },[state.pins.length])
+  },[state.pins.length]);
 
   useEffect(() => {
     getPins();
@@ -95,44 +95,69 @@ const Map = ({ classes }) => {
     // dispatch({ type: "DELETE_PIN", payload: deletePin })
     setPopup(null)
   }
+
+  const handleSeletGeoCode = (item)  => {
+    const latitude = Number(item.center[1].toFixed(6))
+    const longitude = Number (item.center[0].toFixed(6))
+    setViewPort({...viewport, latitude,longitude})
+  } 
+
   return (
   <div className={ classes.root}>
-      <ReactMapGL 
+      <ReactMapGL
       width="100vw"
       height="calc(100vh - 64px)"
       mapStyle="mapbox://styles/mapbox/streets-v9"
       mapboxApiAccessToken="pk.eyJ1IjoiZG91YmxlZHJhZ29udGF6IiwiYSI6ImNrMTI5eDllNjAxNzgzcW16ejJvc3k5a2UifQ.0ot0TfKUMS3uv7OIfM-mwg"
      // scrollZoom ={!mobileSize}
-      
       onViewportChange={newViewport=> setViewPort(newViewport)}
       onClick={handleMapClick}
       {...viewport}
     >
+      {/* <div className={ classes.geolocateControl}>
+        <GeolocateControl
+          positionOptions={{enableHighAccuracy: true}}
+          trackUserLocation={true}
+          // onViewportChange={newViewport=> setViewPort(newViewport)}
+        />
+      </div> */}
+
       {/*Navigation Control */}
       <div className={classes.navigationControl}>
-        <NavigationControl 
+        <NavigationControl
         onViewportChange={newViewport=> setViewPort(newViewport)} />
       </div>
 
+      <div className = {classes.geoCoder}>
+        <Geocoder 
+          accessToken='pk.eyJ1IjoiZG91YmxlZHJhZ29udGF6IiwiYSI6ImNrMTI5eDllNjAxNzgzcW16ejJvc3k5a2UifQ.0ot0TfKUMS3uv7OIfM-mwg'
+          onSelect={handleSeletGeoCode}
+          showLoader={true}
+          inputClass={classes.getCoderInput}
+        /> 
+      </div>
+
+
     {/* Pin for user's current position */}
     {userPosition && (
-      <Marker 
+      <Marker
         latitude={userPosition.latitude}
         longitude={userPosition.longitude}
         offsetLeft={-19}
         offsetTop={-37}
       >
+        <div>You are here</div>
         <PinIcon size={40} color="red"/>
       </Marker>
     )}
 
     {/* Draft Pin */}
     {state.draft && (
-      <Marker 
-      latitude={state.draft.latitude}
-      longitude={state.draft.longitude}
-      offsetLeft={-19}
-      offsetTop={-37}
+      <Marker
+        latitude={state.draft.latitude}
+        longitude={state.draft.longitude}
+        offsetLeft={-19}
+        offsetTop={-37}
     >
       <PinIcon size={40} color="hotpink"/>
     </Marker>
@@ -142,17 +167,17 @@ const Map = ({ classes }) => {
     {/* created pins */}
     {state.pins.map(pin =>(
 
-      <Marker 
-      key={pin._id}
-      latitude={pin.latitude}
-      longitude={pin.longitude}
-      offsetLeft={-19}
-      offsetTop={-37}
+      <Marker
+        key={pin._id}
+        latitude={pin.latitude}
+        longitude={pin.longitude}
+        offsetLeft={-19}
+        offsetTop={-37}
       >
-      <PinIcon 
-      onClick={() => handleSelectPin(pin)  } 
-      size={40} 
-      color={ highlightNewPin(pin) }/>
+      <PinIcon
+        onClick={() => handleSelectPin(pin)  }
+        size={40}
+        color={ highlightNewPin(pin) }/>
       </Marker>
     ))}
 
@@ -160,11 +185,21 @@ const Map = ({ classes }) => {
     {popup && (
       <Popup
         anchor="top"
+        title={popup.title}
         latitude={popup.latitude}
         longitude={popup.longitude}
         closeOnClick={false}
         onClose={()=>setPopup(null)}
       >
+        <Typography
+          noWrap
+          variant="subtitle1"
+          align ="center"
+          color="textPrimary"
+        >
+          {popup.title}
+        </Typography>
+
         <img
           className={classes.popupImage}
           src={popup.image}
@@ -175,48 +210,48 @@ const Map = ({ classes }) => {
             {popup.latitude.toFixed(6)},{popup.longitude.toFixed(6)}
           </Typography>
           {isAuthUser() && (
-            <Button onClick ={() => handleDeletePin(popup)}>  
+            <Button onClick ={() => handleDeletePin(popup)}>
               <DeleteIcon className={classes.deleteIcon} />
-            </Button> 
+            </Button>
           )}
         </div>
       </Popup>
     )}
 
     </ReactMapGL>
-  
+
     {/* Subscription for Creating Updating Delteing Pin */}
 
-    <Subscription 
+    <Subscription
       subscription = { PIN_ADDED_SUBSCRIPTION }
       onSubscriptionData={({ subscriptionData }) => {
         const {pinAdded} = subscriptionData.data
         console.log({pinAdded})
         dispatch({ type: "CREATE_PIN", payload: pinAdded })
       }}
-    
+
     />
 
-    
-  <Subscription 
-        subscription = { PIN_UPDATED_SUBSCRIPTION }
-        onSubscriptionData={({ subscriptionData }) => {
-          const {pinUpdated} = subscriptionData.data
-          console.log({pinUpdated})
-          dispatch({ type: "CREATE_COMMENT", payload: pinUpdated })
-        }}  
-      
-      />
 
-  <Subscription 
-        subscription = { PIN_DELETED_SUBSCRIPTION }
-        onSubscriptionData={({ subscriptionData }) => {
-          const {pinDeleted} = subscriptionData.data
-          console.log({pinDeleted})
-          dispatch({ type: "DELETE_PIN", payload: pinDeleted })
-        }}
-      
-      />
+    <Subscription
+          subscription = { PIN_UPDATED_SUBSCRIPTION }
+          onSubscriptionData={({ subscriptionData }) => {
+            const {pinUpdated} = subscriptionData.data
+            console.log({pinUpdated})
+            dispatch({ type: "CREATE_COMMENT", payload: pinUpdated })
+          }}
+
+        />
+
+    <Subscription
+          subscription = { PIN_DELETED_SUBSCRIPTION }
+          onSubscriptionData={({ subscriptionData }) => {
+            const {pinDeleted} = subscriptionData.data
+            console.log({pinDeleted})
+            dispatch({ type: "DELETE_PIN", payload: pinDeleted })
+          }}
+
+        />
 
     {/* Blog area to add pin content */}
     <Blog />
@@ -239,8 +274,37 @@ const styles = {
     left: 0,
     margin: "1em"
   },
+  geolocateControl: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    margin: "1em"
+  },
+  geoCoder: {
+    fontSize: '18px',
+    lineHeight: '24px',
+    zIndex:1,
+    position: 'relative',
+    backgroundColor: '#fff',
+    width: '50%',
+    borderRadius: '4px',
+    },
+  getCoderInput: {
+    font: 'inherit',
+    width: '100%',
+    border: 0,
+    backgroundColor: 'transparent',
+    margin: 0,
+    height: '50px',
+    color: '#404040', /* fallback */
+    color: 'rgba(0, 0, 0, 0.75)',
+    padding: '6px 45px',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
+    overflow: 'hidden'
+  },
   deleteIcon: {
-    color: "red"
+    color: "red",
   },
   popupImage: {
     padding: "0.4em",
