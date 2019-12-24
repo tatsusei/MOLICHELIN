@@ -107,21 +107,13 @@ const Map = ({ classes }) => {
       <ReactMapGL
       width="100vw"
       height="calc(100vh - 64px)"
-      mapStyle="mapbox://styles/mapbox/streets-v9"
+      mapStyle="mapbox://styles/mapbox/streets-v11"
       mapboxApiAccessToken="pk.eyJ1IjoiZG91YmxlZHJhZ29udGF6IiwiYSI6ImNrMTI5eDllNjAxNzgzcW16ejJvc3k5a2UifQ.0ot0TfKUMS3uv7OIfM-mwg"
      // scrollZoom ={!mobileSize}
       onViewportChange={newViewport=> setViewPort(newViewport)}
       onClick={handleMapClick}
       {...viewport}
     >
-      {/* <div className={ classes.geolocateControl}>
-        <GeolocateControl
-          positionOptions={{enableHighAccuracy: true}}
-          trackUserLocation={true}
-          // onViewportChange={newViewport=> setViewPort(newViewport)}
-        />
-      </div> */}
-
       {/*Navigation Control */}
       <div className={classes.navigationControl}>
         <NavigationControl
@@ -270,13 +262,7 @@ const styles = {
   },
   navigationControl: {
     position: "absolute",
-    top: 0,
-    left: 0,
-    margin: "1em"
-  },
-  geolocateControl: {
-    position: 'absolute',
-    top: 0,
+    bottom: 0,
     left: 0,
     margin: "1em"
   },
