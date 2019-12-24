@@ -28,7 +28,6 @@ module.exports = {
             const pins = await Pin.find({})
                 .populate('author')
                 .populate('comments.author');
-                console.log("Query resolver",ctx.currentUser)
             return pins;
         }
     },
