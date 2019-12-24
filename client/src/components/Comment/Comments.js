@@ -16,9 +16,6 @@ import distanceInWordsToNow from 'date-fns/distance_in_words_to_now'
 const Comments = ({ comments, classes }) => {
   const { state } = useContext(Context);
   // const isAuthUser = () => state.currentPin.author._id === comments.author._id
-
-  console.log(state.currentPin.author._id)
-  console.log(comments)
   return (
     <List className={classes.root}>
     {comments.map((comment, i) =>(
