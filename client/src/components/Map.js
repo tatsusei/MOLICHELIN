@@ -262,7 +262,7 @@ const styles = {
   },
   navigationControl: {
     position: "absolute",
-    bottom: 0,
+    bottom: "1em",
     left: 0,
     margin: "1em"
   },
