@@ -8,13 +8,13 @@ import CreatePin from "./Pin/CreatePin"
 import PinContent from './Pin/PinContent'
 
 const Blog = ({ classes }) => {
-  const { state } = useContext(Context)
-  const { draft, currentPin } = state
+  const { state } = useContext(Context);
+  const { draft, currentPin } = state;
 
   let BlogContent;
   if(!draft && !currentPin){
     // nocontent
-    BlogContent = NoContent
+    BlogContent = NoContent;
   }else if (draft && !currentPin){
     // create pin
     BlogContent = CreatePin
@@ -27,7 +27,7 @@ const Blog = ({ classes }) => {
       <BlogContent />
     </Paper> 
 
-  )
+  );
 };
 
 const styles = {
