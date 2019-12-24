@@ -5,7 +5,6 @@ import AccessTime from "@material-ui/icons/AccessTime";
 import FaceIcon from "@material-ui/icons/Face";
 import Context from '../../context'
 import format from 'date-fns/format'
-
 import CreateComment from '../Comment/CreateComment'
 import Comments from '../Comment/Comments'
 
@@ -18,6 +17,7 @@ const PinContent = ({ classes }) => {
       <Typography component="h2" variant="h4" color="primary" gutterBottom >
         {title}
       </Typography>
+
       <Typography className={classes.text} component="h3" variant="h6" color="inherit" gutterBottom >
         <FaceIcon className ={classes.icon} /> {author.name}
       </Typography>
@@ -27,7 +27,10 @@ const PinContent = ({ classes }) => {
         {format(Number(createdAt),"MMM Do, YYYY")}
       </Typography>
 
-      <Typography variant="subtitle1"  gutterBottom>
+      <Typography variant="subtitle1"  
+        gutterBottom
+        paragraph = {true}
+        align = 'left'>
         {content}
       </Typography>
 
