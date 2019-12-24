@@ -1,15 +1,26 @@
-import React from "react";
+import React, { useState,useContext } from "react";
 import { withStyles } from "@material-ui/core/styles";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 import ListItemAvatar from "@material-ui/core/ListItemAvatar";
+import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
+import IconButton from '@material-ui/core/IconButton';
+import DeleteIcon from '@material-ui/icons/Delete';
+import Context from '../../context'
+
 import Avatar from "@material-ui/core/Avatar";
 import Typography from "@material-ui/core/Typography";
 import distanceInWordsToNow from 'date-fns/distance_in_words_to_now'
 
-const Comments = ({ comments, classes }) => (
-  <List className={classes.root}>
+const Comments = ({ comments, classes }) => {
+  const { state } = useContext(Context);
+  // const isAuthUser = () => state.currentPin.author._id === comments.author._id
+
+  console.log(state.currentPin.author._id)
+  console.log(comments)
+  return (
+    <List className={classes.root}>
     {comments.map((comment, i) =>(
 
       <ListItem key={i} alignItems = "flex-start">
@@ -27,7 +38,17 @@ const Comments = ({ comments, classes }) => (
                ・{distanceInWordsToNow(Number(comment.createdAt))} ago
             </>
           }
+          
         />
+        
+    {state.currentUser.name === comment.author.name && ( 
+        <ListItemSecondaryAction>
+          <IconButton edge="end" aria-label="delete">
+            <DeleteIcon />
+          </IconButton>
+        </ListItemSecondaryAction>
+    )} 
+
       </ListItem>
 
     ) 
@@ -35,8 +56,14 @@ const Comments = ({ comments, classes }) => (
     )}
   </List>
 
-);
 
+
+
+  )
+
+
+}
+  
 const styles = theme => ({
   root: {
     width: "100%",

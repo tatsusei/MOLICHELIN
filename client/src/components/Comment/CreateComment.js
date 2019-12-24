@@ -30,17 +30,17 @@ const handleSubmitComment = async () => {
       </IconButton>
 
       <InputBase 
-      className = {classes.input} 
-      placeholder = "Add Comment" 
-      multiline = {true} 
-      value={comment}
-      onChange = {e => setComment(e.target.value)}
+        className = {classes.input} 
+        placeholder = "Add Comment" 
+        multiline = {true} 
+        value={comment}
+        onChange = {e => setComment(e.target.value)}
       />
     
       <IconButton 
-      onClick={handleSubmitComment}
-      disabled={!comment.trim()} 
-      className = {classes.sendButton}> 
+        onClick={handleSubmitComment}
+        disabled={!comment.trim()} 
+        className = {classes.sendButton}> 
         <SendIcon />
       </IconButton>
     </form>
