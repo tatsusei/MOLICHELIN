@@ -51,6 +51,7 @@ export default function reducer(state, {type, payload}) {
             return {
                 ...state,
                 currentPin: payload,
+                draft: null
             }
         case "DELETE_PIN":
             const deletedPin = payload
