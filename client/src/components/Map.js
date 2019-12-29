@@ -7,18 +7,18 @@ import Typography from "@material-ui/core/Typography";
 import DeleteIcon from "@material-ui/icons/DeleteTwoTone";
 import Geocoder from "react-geocoder-autocomplete";
 
-import { unstable_useMediaQuery as useMediaQuery} from "@material-ui/core/useMediaQuery"
-
 import { useClient } from '../client';
 import { GET_PINS_QUERY } from '../graphql/queries';
 import { DELETE_PIN_MUTATION } from '../graphql/mutations';
 
 import {PIN_ADDED_SUBSCRIPTION,PIN_UPDATED_SUBSCRIPTION,PIN_DELETED_SUBSCRIPTION } from '../graphql/subscriptions'
 import PinIcon from './PinIcon';
+import PeopleIcon from './PeopleIcon'
 import Blog from './Blog';
 import Context from '../context';
 
 import { Subscription } from 'react-apollo'
+import { yellow } from "@material-ui/core/colors";
 
 const INITIAL_VIEWPORT ={
   latitude:35.6698792,
@@ -105,29 +105,30 @@ const Map = ({ classes }) => {
   return (
   <div className={ classes.root}>
       <ReactMapGL
-      width="100vw"
-      height="calc(100vh - 64px)"
-      mapStyle="mapbox://styles/mapbox/streets-v11"
-      mapboxApiAccessToken="pk.eyJ1IjoiZG91YmxlZHJhZ29udGF6IiwiYSI6ImNrMTI5eDllNjAxNzgzcW16ejJvc3k5a2UifQ.0ot0TfKUMS3uv7OIfM-mwg"
-     // scrollZoom ={!mobileSize}
+        width="100vw"
+        height="calc(100vh - 64px)"
+        mapStyle="mapbox://styles/mapbox/streets-v9"
+        mapboxApiAccessToken="pk.eyJ1IjoiZG91YmxlZHJhZ29udGF6IiwiYSI6ImNrMTI5eDllNjAxNzgzcW16ejJvc3k5a2UifQ.0ot0TfKUMS3uv7OIfM-mwg"
+      // scrollZoom ={!mobileSize}
       onViewportChange={newViewport=> setViewPort(newViewport)}
-      onClick={handleMapClick}
-      {...viewport}
-    >
+        onClick={handleMapClick}
+        {...viewport}
+      >
+
       {/*Navigation Control */}
       <div className={classes.navigationControl}>
         <NavigationControl
         onViewportChange={newViewport=> setViewPort(newViewport)} />
       </div>
 
-      <div className = {classes.geoCoder}>
+      {/* <div className = {classes.geoCoder}>
         <Geocoder 
           accessToken='pk.eyJ1IjoiZG91YmxlZHJhZ29udGF6IiwiYSI6ImNrMTI5eDllNjAxNzgzcW16ejJvc3k5a2UifQ.0ot0TfKUMS3uv7OIfM-mwg'
           onSelect={handleSeletGeoCode}
           showLoader={true}
           inputClass={classes.getCoderInput}
         /> 
-      </div>
+      </div> */}
 
 
     {/* Pin for user's current position */}
@@ -139,7 +140,7 @@ const Map = ({ classes }) => {
         offsetTop={-37}
       >
         <div>You are here</div>
-        <PinIcon size={40} color="red"/>
+        <PeopleIcon size={40} color={ yellow[900] }/>
       </Marker>
     )}
 
