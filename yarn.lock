@@ -33,6 +33,13 @@
   resolved "https://registry.yarnpkg.com/@apollographql/graphql-playground-html/-/graphql-playground-html-1.6.24.tgz#3ce939cb127fb8aaa3ffc1e90dff9b8af9f2e3dc"
   integrity sha512-8GqG48m1XqyXh4mIZrtB5xOhUwSsh1WsrrsaZQOEYYql3YN9DEu9OOSg0ILzXHZo/h2Q74777YE4YzlArQzQEQ==
 
+"@azure/msal@^1.0.0":
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/@azure/msal/-/msal-1.2.0.tgz#533941473d5dafa2fa23229fdc58e15843fd376e"
+  integrity sha512-OFTSfDRsaoxQOBBvBW12eFgWRYLsBd3RCYSJYlgt4CpjvE7MSA6ylwzxBvcP94pEQga9601G0V6OV/lqUNZMVg==
+  dependencies:
+    tslib "^1.9.3"
+
 "@babel/runtime@^7.4.4":
   version "7.7.7"
   resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.7.7.tgz#194769ca8d6d7790ec23605af9ee3e42a0aa79cf"
@@ -1966,7 +1973,7 @@ ms@2.1.2, ms@^2.1.1:
   resolved "https://registry.yarnpkg.com/ms/-/ms-2.1.2.tgz#d09d1f357b443f493382a8eb3ccd183872ae6009"
   integrity sha512-sGkPx+VjMtmA6MX27oA4FBFELFCZZ4S4XqeGOXCv68tT+jb3vk/RyaKWP0PTKyWtmLSM0b+adUTEvbs1PEaH2w==
 
-msal@^1.2.0:
+msal@^1.0.0:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/msal/-/msal-1.2.0.tgz#65b375eacf659d003b5444021024c175ac46d554"
   integrity sha512-Z74fTT8G1s1YKcqup6PTQ4Y4z0zh5n7fdK+RXZ47+yLH4/z1Y5LualkRuHr6C7vi74l0daNZn2nj159AV5mhOQ==

@@ -12,7 +12,7 @@ import Context from "../../context"
 
 const CreateComment = ({ classes }) => {
   const client = useClient()
-  const { state, dispatch } = useContext(Context)
+  const { state } = useContext(Context)
   const [comment, setComment] = useState("")
 
 const handleSubmitComment = async () => {

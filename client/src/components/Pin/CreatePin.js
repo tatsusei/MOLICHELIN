@@ -1,5 +1,4 @@
 import React, { useState,useContext } from "react";
-import { GraphQLClient } from 'graphql-request'
 import axios from 'axios'
 import { withStyles } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
@@ -9,6 +8,7 @@ import AddAPhotoIcon from "@material-ui/icons/AddAPhotoTwoTone";
 import LandscapeIcon from "@material-ui/icons/LandscapeOutlined";
 import ClearIcon from "@material-ui/icons/Clear";
 import SaveIcon from "@material-ui/icons/SaveTwoTone";
+import IconButton from "@material-ui/core/IconButton";
 
 import Context from '../../context'
 import {useClient} from '../../client'
@@ -18,6 +18,7 @@ const CreatePin = ({ classes }) => {
   const client = useClient()
   const { state, dispatch }  = useContext(Context);
   const [ title, setTitle ] = useState("");
+  const [ url, setUrl] = useState("");
   const [ image, setImage ] = useState("");
   const [ content, setContent ] = useState("");
   const [ submitting, setSubmitting ] = useState(false);
@@ -26,6 +27,7 @@ const CreatePin = ({ classes }) => {
     setTitle("");
     setImage("");
     setContent("") ;
+    setUrl("");
     dispatch({ type: "DELETE_DRAFT" });
   }
 
@@ -53,14 +55,14 @@ const CreatePin = ({ classes }) => {
       // const client = new GraphQLClient('http://localhost:4000/graphql',{
       //   headers: { authorization: idToken }
       // })
-      const url = await handleImageUpload();
+      const imageUrl = await handleImageUpload();
       const { latitude, longitude } = state.draft;
-      const variables = { title, image: url, content, latitude, longitude };
+      const variables = { title, image: imageUrl, content, latitude, longitude, url };
       await client.request(CREATE_PIN_MUTATION, variables);
       //console.log("Pin created", {createPin});
       //dispatch({ type: "CREATE_PIN", payload: createPin })
       handleDeleteDraft();
-      console.log({ title, image, url, content })
+      console.log({ title, image, imageUrl, content })
       
     } catch (err) {
       setSubmitting(false);
@@ -86,23 +88,13 @@ const CreatePin = ({ classes }) => {
         <TextField name = 'title' label='Title' placeholder='Insert pin title'
           onChange={e => setTitle(e.target.value )}  
         />
-        <input
-          accept="image/*"
-          id="image"
-          type="file"
-          className={classes.input}
-          onChange={e => setImage(e.target.files[0])}
+</div>
+      <div>
+    
+      <TextField name = 'url' label='Url' placeholder='Insert url'
+          onChange={e => setUrl(e.target.value )}  
         />
-        <label htmlFor='image'>
-          <Button
-            style={{ color: image && "green" }}
-            component="span"
-            size="small"
-            className={classes.button}
-          >
-            <AddAPhotoIcon />
-          </Button>
-        </label>
+
       </div>
 
       <div className={classes.contentField}>
@@ -114,8 +106,41 @@ const CreatePin = ({ classes }) => {
           margin='normal'
           fullWidth
           variant="outlined"
+          placeholder=''
           onChange={e => setContent(e.target.value ) }
         />
+      </div>
+
+      <div>
+        <input
+          accept="image/*"
+          id="image"
+          type="file"
+          className={classes.input}
+          onChange={e => setImage(e.target.files[0])}
+        />
+        
+        {
+         image && ( <ClearIcon onClick={ () => setImage("")}  className = {classes.clearButton} />)
+        }
+        {
+         image && (image.name)
+        }
+        {
+        console.log({image})
+        }
+
+
+        <label htmlFor='image'>
+          <Button
+            style={{ color: image && "green" }}
+            component="span"
+            size="small"
+            className={classes.button}
+          >
+            <AddAPhotoIcon />
+          </Button>
+        </label>
       </div>
 
       <div>
@@ -184,7 +209,11 @@ const styles = theme => ({
     marginBottom: theme.spacing.unit * 2,
     marginRight: theme.spacing.unit,
     marginLeft: 0
-  }
+  },
+  clearButton: {
+    padding: 0,
+    color: "red"
+  },
 });
 
 export default withStyles(styles)(CreatePin);

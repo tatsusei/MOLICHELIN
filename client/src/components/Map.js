@@ -1,12 +1,12 @@
 import React, {useState, useEffect, useContext}from "react";
-import ReactMapGL, {NavigationControl, Marker, Popup, GeolocateControl } from "react-map-gl";
+import ReactMapGL, {NavigationControl, Marker, Popup } from "react-map-gl";
 import { withStyles } from "@material-ui/core/styles";
 import differenceInMinutes from 'date-fns/difference_in_minutes'
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import DeleteIcon from "@material-ui/icons/DeleteTwoTone";
-import Geocoder from "react-geocoder-autocomplete";
-
+//import Geocoder from "react-geocoder-autocomplete";
+import EditIcon from '@material-ui/icons/Edit';
 import { useClient } from '../client';
 import { GET_PINS_QUERY } from '../graphql/queries';
 import { DELETE_PIN_MUTATION } from '../graphql/mutations';
@@ -96,11 +96,11 @@ const Map = ({ classes }) => {
     setPopup(null)
   }
 
-  const handleSeletGeoCode = (item)  => {
-    const latitude = Number(item.center[1].toFixed(6))
-    const longitude = Number (item.center[0].toFixed(6))
-    setViewPort({...viewport, latitude,longitude})
-  } 
+  // const handleSeletGeoCode = (item)  => {
+  //   const latitude = Number(item.center[1].toFixed(6))
+  //   const longitude = Number (item.center[0].toFixed(6))
+  //   setViewPort({...viewport, latitude,longitude})
+  // } 
 
   return (
   <div className={ classes.root}>
@@ -207,6 +207,14 @@ const Map = ({ classes }) => {
               <DeleteIcon className={classes.deleteIcon} />
             </Button>
           )}
+          {isAuthUser() && (
+            <Button onClick ={() => console.log("edit icon click")}>
+              <EditIcon className={classes.editIcon} />
+            </Button>
+          )}
+
+
+
         </div>
       </Popup>
     )}
@@ -292,6 +300,9 @@ const styles = {
   },
   deleteIcon: {
     color: "red",
+  },
+  editIcon:{
+    color:"blue"
   },
   popupImage: {
     padding: "0.4em",
