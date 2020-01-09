@@ -201,25 +201,24 @@ const Map = ({ classes }) => {
         longitude={popup.longitude}
         closeOnClick={false}
         onClose={()=>setPopup(null)}
-      >
-        <Typography
-          noWrap
-          variant="subtitle1"
-          align ="center"
-          color="textPrimary"
-        >
+      >  
+        <div className={classes.popupText}>      
+        <Typography noWrap component="h3" variant="h6" align ="left" color="textPrimary">
           {popup.title}
         </Typography>
-
+        <Typography noWrap variant="subtitle1" align ="left" color="textPrimary">
+          Shared by: {popup.author.name}
+        </Typography>
+        </div>
         <img
           className={classes.popupImage}
           src={popup.image}
           alt={popup.title}
         />
         <div className={classes.pupupTab}>
-          <Typography>
+          {/* <Typography>
             {popup.latitude.toFixed(6)},{popup.longitude.toFixed(6)}
-          </Typography>
+          </Typography> */}
           {isAuthUser() && (
             <div>
             <Button onClick ={handleOpen}>
@@ -351,9 +350,12 @@ const styles = {
   },
   popupImage: {
     padding: "0.4em",
-    height: 200,
-    width: 200,
+    height: 300,
+    width: 300,
     objectFit: "cover"
+  },
+  popupText: {
+    padding: "0.4em"
   },
   popupTab: {
     display: "flex",
