@@ -14,6 +14,7 @@ module.exports = gql `
         title: String
         content: String
         image: String
+        url: String
         latitude: Float
         longitude: Float
         author: User
@@ -30,6 +31,7 @@ module.exports = gql `
         title: String
         image: String
         content: String
+        url: String
         latitude: Float
         longitude: Float
     }
