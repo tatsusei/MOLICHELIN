@@ -17,6 +17,12 @@ import PeopleIcon from './PeopleIcon'
 import Blog from './Blog';
 import Context from '../context';
 
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
+
 import { Subscription } from 'react-apollo'
 import { yellow } from "@material-ui/core/colors";
 
@@ -32,6 +38,9 @@ const Map = ({ classes }) => {
   const { state, dispatch } = useContext(Context);
   const [viewport, setViewPort]=useState(INITIAL_VIEWPORT);
   const [userPosition, setUserPosition ] = useState(null);
+  
+  const [openDeleteAlerts, setOpenDeleteAlerts] = useState(false);
+
   useEffect(() => {
     getUserPosition();
   }, []);
@@ -77,7 +86,7 @@ const Map = ({ classes }) => {
     });
   };
 
-  const highlightNewPin = pin => {
+    const highlightNewPin = pin => {
     const  isNewPin = differenceInMinutes(Date.now(), Number(pin.createdAt)) <= 30
     return isNewPin ? "limegreen" : "darkblue";
   }
@@ -89,12 +98,21 @@ const Map = ({ classes }) => {
 
   const isAuthUser = () => state.currentUser._id === popup.author._id
 
-  const handleDeletePin = async pin => {
+  const handleDeletePin = async pin => {    
     const variables = { pinId: pin._id}
     await client.request(DELETE_PIN_MUTATION, variables)
     // dispatch({ type: "DELETE_PIN", payload: deletePin })
     setPopup(null)
   }
+
+  const handleOpen =() => {
+    setOpenDeleteAlerts(true);
+
+  }
+
+  const handleClose = () => {
+    setOpenDeleteAlerts(false);
+  };
 
   // const handleSeletGeoCode = (item)  => {
   //   const latitude = Number(item.center[1].toFixed(6))
@@ -203,15 +221,42 @@ const Map = ({ classes }) => {
             {popup.latitude.toFixed(6)},{popup.longitude.toFixed(6)}
           </Typography>
           {isAuthUser() && (
-            <Button onClick ={() => handleDeletePin(popup)}>
+            <div>
+            <Button onClick ={handleOpen}>
               <DeleteIcon className={classes.deleteIcon} />
             </Button>
+            
+    
+            <Dialog
+            open={openDeleteAlerts}
+            onClose={handleClose}
+            aria-labelledby="alert-dialog-title"
+            aria-describedby="alert-dialog-description"
+            >
+            <DialogTitle id="alert-dialog-title">{"Delete this pin?"}</DialogTitle>
+            <DialogContent>
+              <DialogContentText id="alert-dialog-description">
+                This means all data related to this pin would be removed.
+              </DialogContentText>
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={handleClose} color="primary">
+                No
+              </Button>
+              <Button onClick={() => handleDeletePin(popup)} color="primary" autoFocus>
+                Yes
+              </Button>
+              
+            </DialogActions>
+            </Dialog>
+
+            </div>
           )}
-          {isAuthUser() && (
+          {/* {isAuthUser() && (
             <Button onClick ={() => console.log("edit icon click")}>
               <EditIcon className={classes.editIcon} />
             </Button>
-          )}
+          )} */}
 
 
 
