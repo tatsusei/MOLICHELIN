@@ -15,7 +15,8 @@ const NoContent = ({ classes }) => (
       color="textPrimary" 
       gutterBottom
     >
-      Click on the map to add a pin
+      Click on the map to share <br />
+      your favorite restaurants 
     </Typography>
   </div>
 )
