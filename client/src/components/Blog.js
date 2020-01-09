@@ -32,7 +32,7 @@ const Blog = ({ classes }) => {
 
 const styles = {
   root: {
-    minWidth: 350,
+    minWidth: 400,
     maxWidth: 400,
     maxHeight: "calc(100vh - 64px)",
     overflowY: "scroll",
