@@ -13,6 +13,8 @@ import Button from '@material-ui/core/Button';
 
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
+import Avatar from '@material-ui/core/Avatar';
+
 
 const Header = ({ classes }) => {
   const {state} = useContext(Context)
@@ -45,8 +47,7 @@ const Header = ({ classes }) => {
           { /* Current user Info */}
           {currentUser && (
             <div className={classes.account} > 
-     
-              <img className={classes.picture} src={currentUser.picture} alt={currentUser.name} />
+              {/* <img className={classes.picture} src={currentUser.picture} alt={currentUser.name} /> */}
 
             <Button
             aria-label="account of current user"
