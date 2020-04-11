@@ -88,7 +88,7 @@ const CreatePin = ({ classes }) => {
         <TextField name = 'title' label='Title' placeholder='Insert pin title'
           onChange={e => setTitle(e.target.value )}  
         />
-</div>
+      </div>
       <div>
     
       <TextField name = 'url' label='Url' placeholder='Insert url'
@@ -125,9 +125,6 @@ const CreatePin = ({ classes }) => {
         }
         {
          image && (image.name)
-        }
-        {
-        console.log({image})
         }
 
 

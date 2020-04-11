@@ -38,13 +38,13 @@ const Map = ({ classes }) => {
   const { state, dispatch } = useContext(Context);
   const [viewport, setViewPort]=useState(INITIAL_VIEWPORT);
   const [userPosition, setUserPosition ] = useState(null);
-  
   const [openDeleteAlerts, setOpenDeleteAlerts] = useState(false);
+  const [ popup, setPopup ] = useState(null);
 
   useEffect(() => {
     getUserPosition();
   }, []);
-  const [ popup, setPopup ] = useState(null);
+
   // remove pop if pin itself is deleted by the author of the pin
   useEffect(()=>{
     const pinExists = popup && state.pins.findIndex (pin => pin._id === popup._id) > -1
@@ -86,7 +86,7 @@ const Map = ({ classes }) => {
     });
   };
 
-    const highlightNewPin = pin => {
+  const highlightNewPin = pin => {
     const  isNewPin = differenceInMinutes(Date.now(), Number(pin.createdAt)) <= 30
     return isNewPin ? "limegreen" : "darkblue";
   }
@@ -128,7 +128,7 @@ const Map = ({ classes }) => {
         mapStyle="mapbox://styles/mapbox/streets-v9"
         mapboxApiAccessToken="pk.eyJ1IjoiZG91YmxlZHJhZ29udGF6IiwiYSI6ImNrMTI5eDllNjAxNzgzcW16ejJvc3k5a2UifQ.0ot0TfKUMS3uv7OIfM-mwg"
       // scrollZoom ={!mobileSize}
-      onViewportChange={newViewport=> setViewPort(newViewport)}
+        onViewportChange={newViewport=> setViewPort(newViewport)}
         onClick={handleMapClick}
         {...viewport}
       >
@@ -225,7 +225,6 @@ const Map = ({ classes }) => {
               <DeleteIcon className={classes.deleteIcon} />
             </Button>
             
-    
             <Dialog
             open={openDeleteAlerts}
             onClose={handleClose}
@@ -279,24 +278,22 @@ const Map = ({ classes }) => {
 
 
     <Subscription
-          subscription = { PIN_UPDATED_SUBSCRIPTION }
-          onSubscriptionData={({ subscriptionData }) => {
-            const {pinUpdated} = subscriptionData.data
-            console.log({pinUpdated})
-            dispatch({ type: "CREATE_COMMENT", payload: pinUpdated })
-          }}
-
-        />
+      subscription = { PIN_UPDATED_SUBSCRIPTION }
+      onSubscriptionData={({ subscriptionData }) => {
+        const {pinUpdated} = subscriptionData.data
+        console.log({pinUpdated})
+        dispatch({ type: "CREATE_COMMENT", payload: pinUpdated })
+      }}
+    />
 
     <Subscription
-          subscription = { PIN_DELETED_SUBSCRIPTION }
-          onSubscriptionData={({ subscriptionData }) => {
-            const {pinDeleted} = subscriptionData.data
-            console.log({pinDeleted})
-            dispatch({ type: "DELETE_PIN", payload: pinDeleted })
-          }}
-
-        />
+      subscription = { PIN_DELETED_SUBSCRIPTION }
+      onSubscriptionData={({ subscriptionData }) => {
+        const {pinDeleted} = subscriptionData.data
+        console.log({pinDeleted})
+        dispatch({ type: "DELETE_PIN", payload: pinDeleted })
+      }}
+    />
 
     {/* Blog area to add pin content */}
     <Blog />
